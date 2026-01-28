@@ -1,16 +1,31 @@
-# React + Vite
+# Hướng dẫn Deploy MacNotes (Next.js 16 + MongoDB)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Dự án đã được chuyển đổi sang Next.js 16 và sử dụng MongoDB.
 
-Currently, two official plugins are available:
+## Cấu hình Môi trường (Environment Variables)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Bạn cần tạo file `.env.local` ở local hoặc cấu hình Environment Variables trên Vercel với nội dung:
 
-## React Compiler
+```
+MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/macnotes?retryWrites=true&w=majority
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+> **Lưu ý**: Thay thế `<username>`, `<password>` và `<cluster>` bằng thông tin MongoDB Atlas của bạn.
 
-## Expanding the ESLint configuration
+## Chạy Local
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. Tạo file `.env.local` và điền `MONGODB_URI`.
+2. Chạy lệnh:
+   ```bash
+   npm run dev
+   ```
+
+## Deploy lên Vercel
+
+1. Push code lên GitHub.
+2. Trên Vercel Dashboard, import dự án.
+3. Trong phần **Environment Variables**, thêm `MONGODB_URI`.
+4. Bấm **Deploy**.
+
+## PWA
+Ứng dụng hỗ trợ Progressive Web App (PWA). Bạn có thể cài đặt nó như một ứng dụng native trên điện thoại hoặc máy tính. App icon (`/public/logo.png`) đã được tích hợp.
