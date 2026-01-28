@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Loader2, Mail, Lock, LogIn } from 'lucide-react';
 
 export default function LoginPage() {
@@ -43,9 +44,13 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-yellow-500 rounded-2xl mb-4 shadow-lg">
-            <span className="text-white text-2xl font-bold">M</span>
-          </div>
+          <Image
+            src="/logo.png"
+            alt="MacNotes Logo"
+            width={80}
+            height={80}
+            className="mx-auto mb-4 rounded-2xl shadow-lg"
+          />
           <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">MacNotes</h1>
           <p className="text-zinc-500 dark:text-zinc-400 mt-1">Đăng nhập để tiếp tục</p>
         </div>

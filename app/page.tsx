@@ -4,13 +4,12 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import {
   Plus,
   Trash2,
   Search,
   ChevronLeft,
-  Download,
-  Upload,
   MoreHorizontal,
   Edit3,
   Moon,
@@ -115,8 +114,6 @@ export default function MacNotes() {
   // Tag input state
   const [showTagInput, setShowTagInput] = useState(false);
   const [newTag, setNewTag] = useState('');
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Derived state
   const activeNote = notes.find((n) => n._id === activeNoteId);
@@ -429,57 +426,6 @@ export default function MacNotes() {
     handleUpdateNote('tags', updatedTags);
   };
 
-  // Export/Import
-  const handleExport = () => {
-    const dataStr = JSON.stringify(notes, null, 2);
-    const blob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `macnotes_backup_${new Date().toLocaleDateString('vi-VN').replace(/\//g, '-')}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setShowSettings(false);
-  };
-
-  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      try {
-        const text = event.target?.result as string;
-        const importedNotes = JSON.parse(text);
-        if (Array.isArray(importedNotes)) {
-          if (confirm('Hành động này sẽ thêm các ghi chú vào CSDL. Bạn có chắc chắn không?')) {
-            for (const note of importedNotes) {
-              await fetch('/api/notes', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  title: note.title,
-                  body: note.body,
-                  tags: note.tags || [],
-                }),
-              });
-            }
-            await fetchNotes();
-            alert('Nhập dữ liệu thành công!');
-          }
-        } else {
-          alert('File không hợp lệ.');
-        }
-      } catch (err) {
-        alert('Lỗi khi đọc file/nhập dữ liệu.');
-        console.error(err);
-      }
-    };
-    reader.readAsText(file);
-    setShowSettings(false);
-  };
-
   const formatDate = (isoString: string) => {
     if (!isoString) return '';
     const date = new Date(isoString);
@@ -518,9 +464,13 @@ export default function MacNotes() {
         <div className="p-4 flex flex-col gap-3 border-b border-zinc-200 dark:border-zinc-800">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">M</span>
-              </div>
+              <Image
+                src="/logo.png"
+                alt="MacNotes"
+                width={32}
+                height={32}
+                className="rounded-lg"
+              />
               <span className="font-semibold text-zinc-700 dark:text-zinc-200">MacNotes</span>
             </div>
 
@@ -593,29 +543,6 @@ export default function MacNotes() {
                     >
                       <Laptop size={14} /> Hệ thống
                     </button>
-
-                    <div className="my-1 border-t border-zinc-200 dark:border-zinc-700"></div>
-                    <div className="px-3 py-2 text-xs font-semibold text-zinc-400">Dữ liệu</div>
-
-                    <button
-                      onClick={handleExport}
-                      className="w-full text-left px-3 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-md flex items-center gap-2"
-                    >
-                      <Download size={14} /> Xuất JSON
-                    </button>
-                    <button
-                      onClick={() => fileInputRef.current?.click()}
-                      className="w-full text-left px-3 py-2 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-md flex items-center gap-2"
-                    >
-                      <Upload size={14} /> Nhập JSON
-                    </button>
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      onChange={handleImport}
-                      className="hidden"
-                      accept=".json"
-                    />
 
                     <div className="my-1 border-t border-zinc-200 dark:border-zinc-700"></div>
                     <button
