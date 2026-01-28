@@ -199,7 +199,15 @@ export default function MacNotes() {
     return () => clearTimeout(timer);
   }, [searchQuery, session, fetchNotes]);
 
-  // Theme Logic
+  // Theme Logic - Load saved theme on mount
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('macnotes-theme') as 'light' | 'dark' | 'system' | null;
+    if (savedTheme) {
+      setTheme(savedTheme);
+    }
+  }, []);
+
+  // Apply theme changes
   useEffect(() => {
     const root = window.document.documentElement;
     root.classList.remove('light', 'dark');
@@ -212,6 +220,9 @@ export default function MacNotes() {
     } else {
       root.classList.add(theme);
     }
+    
+    // Save to localStorage
+    localStorage.setItem('macnotes-theme', theme);
   }, [theme]);
 
   // Sidebar responsive logic
@@ -514,7 +525,7 @@ export default function MacNotes() {
 
                     <div className="px-3 py-2 text-xs font-semibold text-zinc-400">Giao diện</div>
                     <button
-                      onClick={() => setTheme('light')}
+                      onClick={() => { setTheme('light'); setShowSettings(false); }}
                       className={`w-full text-left px-3 py-2 text-sm rounded-md flex items-center gap-2 ${
                         theme === 'light'
                           ? 'bg-yellow-500/10 text-yellow-600'
@@ -524,7 +535,7 @@ export default function MacNotes() {
                       <Sun size={14} /> Sáng
                     </button>
                     <button
-                      onClick={() => setTheme('dark')}
+                      onClick={() => { setTheme('dark'); setShowSettings(false); }}
                       className={`w-full text-left px-3 py-2 text-sm rounded-md flex items-center gap-2 ${
                         theme === 'dark'
                           ? 'bg-yellow-500/10 text-yellow-600'
@@ -534,7 +545,7 @@ export default function MacNotes() {
                       <Moon size={14} /> Tối
                     </button>
                     <button
-                      onClick={() => setTheme('system')}
+                      onClick={() => { setTheme('system'); setShowSettings(false); }}
                       className={`w-full text-left px-3 py-2 text-sm rounded-md flex items-center gap-2 ${
                         theme === 'system'
                           ? 'bg-yellow-500/10 text-yellow-600'
