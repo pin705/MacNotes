@@ -17,6 +17,7 @@
 - **☁️ Cloud Sync** - Real-time sync across devices
 - **🌓 Dark Mode** - Light, dark, and system theme options
 - **📱 PWA Support** - Install as a native app on mobile/desktop
+- **💻 Desktop App** - Native desktop app with Electron
 - **🎨 Premium Design** - Clean, minimal, Apple-inspired UI
 
 ## 🚀 Tech Stack
@@ -28,6 +29,7 @@
 - **Styling**: Tailwind CSS 4
 - **Editor**: Tiptap
 - **PWA**: @ducanh2912/next-pwa
+- **Desktop**: Electron
 
 ## 📦 Installation
 
@@ -46,6 +48,23 @@ cp .env.example .env.local
 # Run development server
 npm run dev
 ```
+
+## 💻 Desktop App (Electron)
+
+```bash
+# Run in development mode
+npm run electron:dev
+
+# Build for your platform
+npm run electron:build
+
+# Build for specific platforms
+npm run electron:build:win    # Windows
+npm run electron:build:mac    # macOS
+npm run electron:build:linux  # Linux
+```
+
+Built apps will be in `dist-electron/` folder.
 
 ## ⚙️ Environment Variables
 
@@ -82,4 +101,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-Made with ❤️ using Next.js and MongoDB
+Made with ❤️ using Next.js, MongoDB, and Electron
